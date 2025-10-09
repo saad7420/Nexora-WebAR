@@ -1,0 +1,145 @@
+3D → WebAR App — MVP Roadmap & Technical Blueprint
+
+Owner: CodeLixi (Noman Azam) Primary Market (MVP): Restaurants (AR menus) Product Type: No/low-code web application that converts uploaded 3D food models into WebAR experiences and provides a sharable link/QR to embed on clients' websites.
+
+1) Executive summary
+
+A lightweight web platform where restaurant owners (or designers) upload 3D models of menu items, the system automatically optimizes and packages them into WebAR-ready formats (glTF/GLB for WebXR and USDZ for iOS Quick Look), hosts them, and delivers a short link + QR code. The AR experience emphasizes photorealistic, scale-accurate food presentation (lighting, materials, true-to-life textures) rather than cartoonish 3D characters.
+
+2) Primary goals (MVP)
+
+Turn 3D models into high-quality, mobile-friendly WebAR experiences with a single upload.
+
+Provide an embeddable link/QR the client can place on their website or menu pages.
+
+Offer basic customization: branding, background, annotation hotspots (name, price, allergy/ingredient toggle), simple animation (rotation/pulse), and scaling control.
+
+Fully automated optimization pipeline: texture compression, LOD generation, mesh decimation, PBR conversion, and lighting baking.
+
+Simple admin dashboard for clients (upload, manage models, generate links, metrics).
+
+3) Core user stories (MVP)
+
+Restaurant owner (non-technical): Upload .fbx/.obj/.glb/.gltf or .zip containing textures → choose menu item name, price, and optional description → click Generate WebAR → receive link + QR code to embed.
+
+Designer/3D artist: Upload high-poly model → server-side pipeline optimizes and returns a preview + downloadable GLB/USDZ for review.
+
+Website visitor (end user): Click AR link or scan QR on mobile → WebAR experience loads in mobile browser (or iOS Quick Look for USDZ) → place model in world, view from all angles, tap hotspots for info, add to wishlist/share.
+
+Admin (CodeLixi): Manage client accounts, usage, billing (later), and global settings.
+
+4) Feature list — MVP (page-by-page / screen-by-screen)
+
+A. Landing / Marketing page
+
+Hero: short explainer + CTA ("Upload your 3D model — get WebAR link in minutes")
+
+How it works (3-step flow)
+
+Pricing / Contact for enterprise
+
+B. Onboarding & Signup
+
+Email/password + OAuth (Google)
+
+Client profile: restaurant name, location, timezone, contact
+
+C. Upload + Conversion screen
+
+Drag & drop or browse file
+
+Accepted formats: .glb, .gltf, .fbx, .obj (+ .mtl + textures), .zip
+
+Preflight checks: file size, supported textures, UV presence
+
+Optional inputs: item name, price, description, category, allergen tags
+
+Advanced (toggle): target max polycount, texture max resolution, background environment (studio/transparent/restaurant table)
+
+Button: Generate WebAR — shows conversion job progress
+
+D. Model Preview & Edit
+
+3D preview (rotate/zoom) via Three.js
+
+Quick material adjustments (exposure, saturation) and scale/anchor
+
+Add hotspot(s) — add text, link, or action
+
+Set default placement (on table / floor) and distance
+
+E. Link/QR generation & Embed options
+
+Short link (e.g., ar.codelixi.com/r/abc123)
+
+QR code PNG/SVG
+
+Embed snippet (iframe or JavaScript snippet)
+
+Option to export GLB/USDZ
+
+F. Dashboard & Analytics
+
+List of uploaded models with status
+
+Views, AR launches, average session time, top hotspots tapped
+
+Client usage summary (last 7/30/90 days)
+
+G. Admin Console (CodeLixi)
+
+User management, job monitoring, billing overview
+
+Conversion queue and retry logs
+
+5) Technical architecture (high level)
+
+Frontend
+
+React + TypeScript (no/low-code UI)
+
+Three.js for in-browser 3D previews
+
+Tailwind CSS (or your design system)
+
+Progressive Web App (PWA) for offline caching
+
+Backend
+
+Node.js + Express (or NestJS) for API
+
+Conversion workers (containerized) running FFmpeg-like 3D tools or Python scripts
+
+Message queue (RabbitMQ / Redis streams) for job scheduling
+
+Storage
+
+Object storage: AWS S3 for models, USDZ/GLB
+
+CDN (CloudFront / Fastly) to serve assets quickly worldwide
+
+Conversion tools & libraries
+
+glTF/GLB: Use gltf-pipeline, obj2gltf, FBX2glTF or Blender headless for reliable conversion
+
+USDZ: Use Apple’s usd_from_gltf tools or usdzconvert via Docker/Blender plugin
+
+Optimization: meshoptimizer, glsl-optimizer, texture compressors (Basis/BasisU / KTX2) to create universal compressed textures
+
+Baking / PBR: Use Blender headless to bake lighting maps and convert materials into PBR metallic-roughness workflow
+
+LOD generation: simplify algorithms via Blender or meshoptimizer to produce multiple LODs
+
+WebAR runtime
+
+Primary: WebXR + Three.js for browsers that support it
+
+Fallback: Model-viewer (for simpler iOS/Android support) + USDZ Quick Look for iOS Safari
+
+Optionally integrate with 8thWall or Zappar later for richer tracking (paid)
+
+CI / Infra
+
+Dockerize conversion workers
+
+Kubernetes (EKS /...

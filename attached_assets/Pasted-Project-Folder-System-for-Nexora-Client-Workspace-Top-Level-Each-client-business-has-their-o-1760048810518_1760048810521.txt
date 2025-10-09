@@ -1,0 +1,104 @@
+Project / Folder System for Nexora
+
+Client Workspace (Top Level)
+Each client/business has their own workspace (e.g., “Bella Italia Restaurant”).
+Workspace includes: company info (logo, name, contact), overall usage stats, and project list.
+
+Projects (Inside Workspace)
+Within a workspace, the client can create multiple projects (folders).
+Example:
+Summer Specials 2025 (with 10 AR dishes)
+Main Menu (with 20 AR dishes)
+Holiday Promo (with 5 AR dishes)
+Each project has its own dashboard, link/QR library, and analytics.
+
+Assets (Inside Project)
+Each project contains 3D models (dishes/products) with their WebAR links/QR codes.
+Easy to manage: rename, replace, delete, edit AR details.
+
+Benefits of This System
+🔑 Organization → Clients clearly see which AR assets belong to which campaign/menu.
+📊 Analytics by Project → Track AR performance per campaign, per menu, or per season.
+🤝 Multi-project scaling → One client can run many campaigns without confusion.
+⚡ Future SaaS growth → Enterprise clients (chains, franchises) can manage AR menus across multiple branches/projects.
+
+UI/UX Flow
+Dashboard → Shows list of Workspaces (if admin) or Projects (if client).
+Project View → Shows assets inside, with preview and analytics.
+Asset View → Shows WebAR preview, link/QR, and customization.
+
+Example
+Workspace: “StarBistro NYC”
+Project 1: Main Menu (25 dishes, total views: 1,500)
+Project 2: Cocktail Specials (12 drinks, total views: 700)
+Project 3: Christmas Promo (8 items, total views: 1,200)
+
+🚀 Nexora Development Timeline (Proposed)
+Phase 0 – Preparation
+Finalize requirements (we already did 80% ✅)
+Confirm tech stack (React/Node/Blender pipeline/S3 hosting)
+Wireframes → clickable prototype (for clarity)
+Test conversion pipeline (3D → GLB + USDZ) with 2–3 sample dishes
+Deliverable: Internal demo that proves 3D → WebAR link works.
+
+Phase 1 – Core MVP Build
+Frontend: Upload screen, preview, link/QR generator
+Backend: Conversion pipeline (optimize → glTF/USDZ)
+Hosting + CDN delivery
+Folder/Project system (basic version: create project → upload → link)
+Deliverable: Restaurants can upload → get WebAR link → share.
+
+Phase 2 – Dashboard & Customization
+Project dashboard with stats (views, AR launches)
+Hotspots (ingredients, price, allergy info)
+Branding options (logo, background theme)
+Model preview editor (scale, rotate, lighting toggle)
+Deliverable: Polished AR menu experience ready for pilot.
+
+Phase 3 – Analytics & Admin Console
+Analytics per project & asset
+Admin console (for CodeLixi team)
+Multi-client support
+Stability + QA + mobile tests
+Deliverable: Full MVP ready for NYC restaurant pilot.
+⏱️ Total MVP Timeline:
+After that, we can launch pilots, gather feedback, then plan SaaS features.
+
+That transparency behavior is a core UX detail for a professional WebAR product like Nexora.
+When users open an AR model on their phone (through WebAR viewer), the background must automatically become transparent — so the model blends seamlessly with the real-world camera feed instead of showing a gray/white background.
+
+Let’s integrate that into the Copilot prompt precisely. Here’s the updated section (to replace/add in your main prompt):
+
+🧠 AR Viewer Behavior (Mobile & WebAR)
+When the user opens a WebAR model (via generated link or QR code), the background must be transparent on mobile AR view.
+Use <model-viewer> with ar, ar-modes="webxr scene-viewer quick-look", and reveal="interaction".
+Set background-color: transparent; and ensure the WebGL context supports transparency.
+Automatically detect device type:
+On mobile: enable AR mode with transparent background.
+On desktop: show 3D preview with neutral dark gradient background.
+Include an AR entry button labeled “View in your space”, styled with neon mint glow.
+Ensure seamless transition between 3D preview → AR mode (no reload or flicker).
+Add a light instruction overlay (“Move your phone to detect surface”) that fades after detection.
+
+roposed refined palette (dark-first, with light-mode pair)
+Dark mode (primary):
+Background: --bg-900: #0F1720 (deep charcoal/navy)
+Surface: --surface-800: #161B23
+Divider: --divider: #24292f
+Text main: --text-100: #F8FAFC (soft white)
+Muted text: --muted-300: #98A0A8
+
+Brand accents:
+Primary (luxury blue-violet): --primary-500: #6366F1 (keep earlier blue-violet, balanced & modern)
+Accent (gold for premium touches): --gold-400: #D4AC0D (use sparingly: badges, “featured” tags, premium CTAs)
+Accent alt (cool cyan for action): --accent-300: #22D3EE (use for interactive elements)
+Light mode pairing:
+Background: #FFFFFF
+Surface: #F7F9FB
+Text: #0F1720
+Accent primary: same #6366F1 (works well on light)
+
+Why this?
+#6366F1 lends a modern tech identity and pairs well with gold for premium feel.
+Keep gold for subtle highlights only — overuse of gold feels dated.
+Provide strong contrast both dark & light, meeting WCAG.
